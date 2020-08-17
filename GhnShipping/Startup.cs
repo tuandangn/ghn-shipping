@@ -1,29 +1,84 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using GhnShipping.Infrastructure;
+using GhnShipping.Infrastructure.Settings;
+using GhnShipping.Infrastructure.Directory;
+using GhnShipping.Infrastructure.Network;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Net.Http;
+using GhnShipping.Services.Network;
+using AutoMapper;
+using GhnShipping.Infrastructure.Mapper;
 
 namespace GhnShipping
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddHttpClient();
+
+            //services
+            services.AddScoped<IWorkContext, WorkContext>();
+            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IDirectoryService, DirectoryService>();
+
+            //options
+            var urlSettingsConfig = _configuration.GetSection(Defaults.UrlSettings);
+            services.Configure<UrlSettings>(urlSettingsConfig);
+            services.Configure<ApiSettings>(_configuration.GetSection(Defaults.ApiSettings));
+
+            //http clients
+            var urlSettings = urlSettingsConfig.Get<UrlSettings>();
+            services.AddHttpClient(ClientNames.PRODUCTION, (services, client) => SetupClient(client, services, urlSettings.Production));
+            services.AddHttpClient(ClientNames.DEVELOPMENT, (services, client) => SetupClient(client, services, urlSettings.Development));
+
+            //auto mapper
+            var mapperConfiguration = new MapperConfiguration(config => config.AddProfile<ModelProfile>());
+            var mapper = mapperConfiguration.CreateMapper();
+            services.AddSingleton(mapper);
+
+            #region Local methods
+
+            void SetupClient(HttpClient client, IServiceProvider services, string baseAddress)
+            {
+                client.BaseAddress = new Uri(baseAddress);
+
+                var token = GetToken(services);
+                client.DefaultRequestHeaders.Add(Defaults.TokenHeaderName, token);
+            }
+
+            string GetToken(IServiceProvider services)
+            {
+                using var scoped = services.CreateScope();
+                var workContext = scoped.ServiceProvider.GetRequiredService<IWorkContext>();
+                var token = workContext.GetToken();
+
+                return token;
+            }
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseStatusCodePages();
+
+            if (!env.IsDevelopment())
+            {
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

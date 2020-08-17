@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GhnShipping.Services
+namespace GhnShipping.Infrastructure.Directory
 {
     public interface IDirectoryService
     {

@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace GhnShipping.Domain.Directory
 {
     [Serializable]
-    public class District
+    public sealed class District
     {
+        [JsonProperty("DistrictID")]
         public int Id { get; set; }
 
+        [JsonProperty("ProvinceID")]
         public int ProvinceId { get; set; }
 
+        [JsonProperty("DistrictName")]
         public string Name { get; set; }
 
         public string Code { get; set; }

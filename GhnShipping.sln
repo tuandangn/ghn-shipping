@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GhnShipping", "GhnShipping\GhnShipping.csproj", "{E01E299F-2364-4998-9EDF-E23E0080A666}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhnShipping", "GhnShipping\GhnShipping.csproj", "{E01E299F-2364-4998-9EDF-E23E0080A666}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GhnShipping.Tests", "GhnShipping.Tests\GhnShipping.Tests.csproj", "{0E1FA845-7CC3-4973-8F5B-61F643F1334E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{E01E299F-2364-4998-9EDF-E23E0080A666}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E01E299F-2364-4998-9EDF-E23E0080A666}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E01E299F-2364-4998-9EDF-E23E0080A666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E1FA845-7CC3-4973-8F5B-61F643F1334E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E1FA845-7CC3-4973-8F5B-61F643F1334E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1FA845-7CC3-4973-8F5B-61F643F1334E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1FA845-7CC3-4973-8F5B-61F643F1334E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
