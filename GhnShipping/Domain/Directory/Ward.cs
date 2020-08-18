@@ -7,7 +7,7 @@ namespace GhnShipping.Domain.Directory
     public sealed class Ward
     {
         [JsonProperty("WardCode")]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("DistrictID")]
         public int DistrictId { get; set; }

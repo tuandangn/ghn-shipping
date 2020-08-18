@@ -12,6 +12,9 @@ using System.Net.Http;
 using GhnShipping.Services.Network;
 using AutoMapper;
 using GhnShipping.Infrastructure.Mapper;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
 
 namespace GhnShipping
 {
@@ -27,6 +30,28 @@ namespace GhnShipping
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(Defaults.Version, new OpenApiInfo
+                {
+                    Version = Defaults.Version,
+                    Title = "GHN Shipping API",
+                    Description = "GHN Shipping API customized",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Tuan Dang",
+                        Email = "nguyentuandang7@gmail.com",
+                        Url = new Uri("https://facebook.com/ng.tuan.dang7"),
+                    }
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             //services
             services.AddScoped<IWorkContext, WorkContext>();
@@ -80,11 +105,18 @@ namespace GhnShipping
             }
             app.UseHttpsRedirection();
 
+            //swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/{Defaults.Version}/swagger.json", $"GHN Shipping Api - {Defaults.Version}");
+            });
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
         }
     }

@@ -15,6 +15,8 @@ namespace GhnShipping.Tests.Helpers.Options
         {
             private readonly Mock<IOptionsSnapshot<UrlSettings>> _optionAccessorMock;
             private string _provinceUrl;
+            private string _districtUrl;
+            private string _wardUrl;
 
             public UrlSettingsBuilder()
             {
@@ -27,9 +29,24 @@ namespace GhnShipping.Tests.Helpers.Options
                 return this;
             }
 
+            public UrlSettingsBuilder DistrictUrl(string url)
+            {
+                _districtUrl = url;
+                return this;
+            }
+            public UrlSettingsBuilder WardUrl(string url)
+            {
+                _wardUrl = url;
+                return this;
+            }
+
             public Mock<IOptionsSnapshot<UrlSettings>> Build()
             {
-                var urlSettings = new UrlSettings { Province = _provinceUrl};
+                var urlSettings = new UrlSettings {
+                    Province = _provinceUrl,
+                    District = _districtUrl,
+                    Ward = _wardUrl
+                };
                 _optionAccessorMock.Setup(api => api.Value)
                     .Returns(urlSettings)
                     .Verifiable();

@@ -9,6 +9,10 @@ namespace GhnShipping.Infrastructure.Mapper
         public ModelProfile()
         {
             CreateMap<Province, ProvinceModel>();
+
+            CreateMap<District, DistrictModel>();
+
+            CreateMap<Ward, WardModel>();
         }
     }
 }

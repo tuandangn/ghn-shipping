@@ -13,5 +13,23 @@ namespace GhnShipping.Tests.Helpers
                 Name = province.Name
             };
         }
+
+        public static DistrictModel ToModel(this District district)
+        {
+            return new DistrictModel
+            {
+                Id = district.Id,
+                Name = district.Name
+            };
+        }
+
+        public static WardModel ToModel(this Ward ward)
+        {
+            return new WardModel
+            {
+                Id = ward.Id,
+                Name = ward.Name
+            };
+        }
     }
 }
